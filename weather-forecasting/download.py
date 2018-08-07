@@ -1,6 +1,6 @@
 ########################################################################
 #
-# This file is part of the TensorFlow Tutorials available at:
+# This file is copied from the TensorFlow Tutorials available at:
 #
 # https://github.com/Hvass-Labs/TensorFlow-Tutorials
 #
