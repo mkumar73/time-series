@@ -17,7 +17,7 @@ When you click the **Knit** button a document will be generated that includes bo
 
 
 ## load packages
-```{r load packages}
+```{r}
 library(fpp2)  
 library(astsa)  
 library(DT)  
@@ -25,8 +25,9 @@ library(dygraphs)
 ```
 
 ## load data
-```{r load data, echo=TRUE}
+```{r load data, echo=False}
 beer <- read.csv("data/monthly-beer-production-australia.csv")  
-head(beer)  
+head(beer)
+summary(beer)
 ```
 
