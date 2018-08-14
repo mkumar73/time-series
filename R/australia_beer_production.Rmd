@@ -25,7 +25,7 @@ library(dygraphs)
 ```
 
 ## load data
-```{r load data, include=TRUE, results='markup'}
+```{r load data, echo=TRUE}
 beer <- read.csv("data/monthly-beer-production-australia.csv")  
 head(beer)  
 ```
