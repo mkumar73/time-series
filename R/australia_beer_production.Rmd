@@ -21,6 +21,23 @@ library(dygraphs)
 ```{r load data, echo=T}
 beer <- read.csv("data/monthly-beer-production-australia.csv")  
 head(beer)
+```
+```{r load data, echo=T}
+tail(beer)
+```
+```{r load data, echo=T}
 summary(beer)
 ```
+```{r load data, echo=T}
+hist(beer)
+```
+
+
+
+
+
+
+
+
+
 
