@@ -80,14 +80,19 @@ lines(ma(beer.ts[,2], order = 60), col = "green", lwd=3)
 plot(beer.ts[,2], col="gray", main = "10 Year Moving Average Smoothing")
 lines(ma(beer.ts[,2], order = 120), col = "yellow4", lwd=3)
 ```
-# data transformation and adjustments
-<!-- 
-adjusting and transformating data can makes the historical data less complex so a simpler forecast model can be used. It is also a good idea to remove the underline factors affected the time series like workday, inflation, population, and currancy exchange rate etc.-->
 
-## calendar adjustment
-<!-- not all month have same days, so this variation should be removed for analysis, 
-also, so we will look at monthly sales dividing the number of working days in a month
-for better analysis-->
+
+```{r data transformations and adjustments}
+# adjusting and transformating data can makes the historical data less complex so a simpler
+# forecast model can be used. It is also a good idea to remove the underline factors affected 
+# the time series like workday, inflation, population, and currancy exchange rate etc.
+```
+
+```{r calendar adjustment}
+# not all month have same days, so this variation should be removed for analysis, 
+# also, so we will look at monthly sales dividing the number of working days in a month
+# for better analysis
+```
 
 ```{r monthly anayis raw, echo=T}
 plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
