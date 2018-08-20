@@ -113,7 +113,7 @@ plot.ts(beer.ts[,2]/monthdays(beer.ts[,2]), main = "Monthly Beer Production in A
 ```
 
 # logarithmic transformation
-```{r adjustment, echo=T}
+```{r log adjustment, echo=T}
 # Transform exponential trend line into a linear line using such transformations.
 # It is used before differencing data to improve stationarity.
 ```
@@ -135,6 +135,8 @@ plot.ts(log(beer.ts[,2]), main = "Log Transformated Monthly Beer Production in A
 ```{r stl decomposition, echo=T}
 plot(stl(beer.ts[,2], s.window="periodic"))
 ```
+
+
 # basic forecasting techniques (SNSD)
 ```{r forecasting, echo=T}
 # Simple Average - simple average of all data points
@@ -157,6 +159,108 @@ lines(beer.fit.sn$mean, col = "red")
 legend("topleft",lty=1,col=c("blue","yellow4","seagreen4", "red"), cex = 0.75,
        legend=c("Mean method","Naive method","Drift Naive method", "Seasonal naive method"))
 ```
+
+# simple regression analysis
+```{r regression analysis 1, echo=T}
+# simple regression model for trend analysis
+
+beer.fit.lm <- tslm(beer.ts[,2] ~ trend)
+f <- forecast(beer.fit.lm, h = 120, level = c(80,95))
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML", xlim = c(1954,2004))
+lines(f$fitted, col = "blue")
+lines(f$mean, col = "blue")
+```
+```{r regression analysis 2, echo=T}
+# simple regression model for trend analysis
+# fitted versus actul plot
+
+plot(beer.fit.lm$fitted, beer.ts[,2], main = "Scatterplot between fitted & actual values", xlab = "Fitted Value", ylab = "Actual")
+abline(0, 1, col="blue")
+```
+
+
+```{r regression analysis 3, echo=T}
+# simple regression model for trend analysis
+# model summary
+
+summary(beer.fit.lm)
+```
+
+```{r regression analysis 4, echo=T}
+# simple regression model for (trend + seasonal) analysis
+# model summary
+
+beer.fit.lm2 <- tslm(beer.ts[,2] ~ trend + season)
+summary(beer.fit.lm2)
+```
+
+```{r regression analysis 5, echo=T}
+# simple regression model for (trend + seasonal) analysis
+# fitted values
+
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+lines(beer.fit.lm2$fitted.values, col = "blue")
+```
+```{r regression analysis 6, echo=T}
+# simple regression model for (trend + seasonal) analysis
+# scatter plot
+
+plot(beer.fit.lm2$fitted, beer.ts[,2], main = "Scatterplot between fitted & actual values", xlab = "Fitted Value", ylab = "Actual")
+abline(0, 1, col="blue")
+```
+
+```{r regression analysis 7, echo=T}
+# simple regression model for (trend + seasonal) analysis
+# forecast
+
+f <- forecast(beer.fit.lm2, h = 120, level = c(80,95))
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML", xlim = c(1954,2004))
+lines(f$mean, col = "blue")
+```
+
+# polynomial regression analysis
+```{r polynomial regression analysis, echo=T}
+# the trend is not linear so lets try polynomial regression
+# power 2
+
+t <- seq(1956, 1995.2, length = length(beer.ts[,2]))
+t2 <- t^2
+beer.fit.lm3 <- tslm(beer.ts[,2] ~ t + t2)
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+lines(beer.fit.lm3$fit, col = "blue")
+```
+```{r polynomial regression analysis 1, echo=T}
+# the trend is not linear so lets try polynomial regression
+# sin and cosine
+
+sin.t <- sin(2*pi*t)
+cos.t <- cos(2*pi*t)
+beer.fit.lm4 <- tslm(beer.ts[,2] ~ t + t2 + sin.t + cos.t)
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+lines(beer.fit.lm4$fit, col = "blue")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
