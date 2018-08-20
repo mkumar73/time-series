@@ -50,7 +50,32 @@ plot.ts(beer.ts.qtr[,2], main = "Quaterly Beer Production in Australia", xlab = 
 beer.ts.yr <- aggregate(beer.ts, nfrequency=1)
 plot.ts(beer.ts.yr[,2], main = "Yearly Beer Production in Australia", xlab = "Year", ylab = "ML")
 ```
+```{r seasonal plot, echo=T}
+seasonplot(beer.ts[,2], year.labels = TRUE, year.labels.left=TRUE, col=1:40, pch=19, main = "Monthly Beer Production in Australia - seasonplot", xlab = "Month", ylab = "ML")
+```
 
+```{r monthly plot, echo=T}
+# monthly plot aggreated the data of all year for montly analysis
+# each month plots show the variation for entire data in each month
+monthplot(beer.ts[,2], main = "Monthly Beer Production in Australia - monthplot", xlab = "Month", ylab = "ML")
+```
+```{r boxplot, echo=T}
+boxplot(beer.ts[,2] ~ cycle(beer.ts[,2]), xlab = "Month", ylab = "ML", main = "Monthly Beer Production in Australia - Boxplot")
+```
+```{r moving average analysis, echo=T}
+# moving average is useful when we need to analyse trend for the underlying data
+# here, we see the moving average for 1 year, 3 year 5 year and 10 year
+# Note : If there is not trend, average is good enough for the analysis
+par(mfrow = c(2,2))
+plot(beer.ts[,2], col="gray", main = "1 Year Moving Average Smoothing")
+lines(ma(beer.ts[,2], order = 12), col = "red", lwd=3)
+plot(beer.ts[,2], col="gray", main = "3 Year Moving Average Smoothing")
+lines(ma(beer.ts[,2], order = 36), col = "blue", lwd=3)
+plot(beer.ts[,2], col="gray", main = "5 Year Moving Average Smoothing")
+lines(ma(beer.ts[,2], order = 60), col = "green", lwd=3)
+plot(beer.ts[,2], col="gray", main = "10 Year Moving Average Smoothing")
+lines(ma(beer.ts[,2], order = 120), col = "yellow4", lwd=3)
+```
 
 
 
