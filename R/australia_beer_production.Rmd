@@ -24,6 +24,7 @@ library(dygraphs)
 beer <- read.csv("data/monthly-beer-production-australia.csv")  
 head(beer)
 ```
+# basic analysis
 ```{r lower part of data, echo=T}
 tail(beer)
 ```
@@ -37,6 +38,7 @@ beer.ts <- ts(beer, frequency = 12, start = c(1956,1), end = c(1994,12))
 ```{r view ts converted dataframe, echo=T}
 head(beer.ts)
 ```
+# time series plots
 ```{r month level plots, echo=T}
 plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
 ```
@@ -78,9 +80,43 @@ lines(ma(beer.ts[,2], order = 60), col = "green", lwd=3)
 plot(beer.ts[,2], col="gray", main = "10 Year Moving Average Smoothing")
 lines(ma(beer.ts[,2], order = 120), col = "yellow4", lwd=3)
 ```
+# data transformation and adjustments
+<!-- 
+adjusting and transformating data can makes the historical data less complex so a simpler forecast model can be used. It is also a good idea to remove the underline factors affected the time series like workday, inflation, population, and currancy exchange rate etc.-->
 
+## calendar adjustment
+<!-- not all month have same days, so this variation should be removed for analysis, 
+also, so we will look at monthly sales dividing the number of working days in a month
+for better analysis-->
 
+```{r monthly anayis raw, echo=T}
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
 
+```
+
+```{r adjusted monthly analysis, echo=T}
+plot.ts(beer.ts[,2]/monthdays(beer.ts[,2]), main = "Monthly Beer Production in Australia - Adjusted By Calendar Days", xlab = "Year", ylab = "ML")
+```
+
+## population adjustment
+<!-- The beer production has been increased since last 50 years but
+one thing to notice is that the population has also been increased in these year.
+So, we need to analyse the data removing this factor.
+Note: australian_population data is not available as of now, so we will not
+do this adjustment but it needs to be taken care depeding on use-case.-->
+
+## logarithmic transformation
+<!-- Transform exponential trend line into a linear line using such transformations.
+It is used before differencing data to improve stationarity.
+-->
+
+```{r before log transformatin, echo=T}
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+```
+
+```{r after log transformatin, echo=T}
+plot.ts(log(beer.ts[,2]), main = "Log Transformated Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+```
 
 
 
