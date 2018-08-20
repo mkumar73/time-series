@@ -22,18 +22,34 @@ library(dygraphs)
 beer <- read.csv("data/monthly-beer-production-australia.csv")  
 head(beer)
 ```
-```{r load data, echo=T}
+```{r lower part of data, echo=T}
 tail(beer)
 ```
-```{r load data, echo=T}
+```{r summarize data, echo=T}
 summary(beer)
 ```
-```{r load data, echo=T}
-hist(beer)
+```{r convert to dataframe using ts, echo=T}
+beer.ts <- ts(beer, frequency = 12, start = c(1956,1), end = c(1994,12))
 ```
 
+```{r view ts converted dataframe, echo=T}
+head(beer.ts)
+```
+```{r month level plots, echo=T}
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+```
 
+```{r quater level plot, echo=T}
+# aggregared on quater level
+beer.ts.qtr <- aggregate(beer.ts, nfrequency=4)
+plot.ts(beer.ts.qtr[,2], main = "Quaterly Beer Production in Australia", xlab = "Year", ylab = "ML")
+```
 
+``` {r year level plot, echo=T}
+# aggregared on year level
+beer.ts.yr <- aggregate(beer.ts, nfrequency=1)
+plot.ts(beer.ts.yr[,2], main = "Yearly Beer Production in Australia", xlab = "Year", ylab = "ML")
+```
 
 
 
