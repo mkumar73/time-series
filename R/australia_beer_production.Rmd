@@ -46,7 +46,8 @@ plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year
 ```{r quater level plot, echo=T}
 # aggregared on quater level
 beer.ts.qtr <- aggregate(beer.ts, nfrequency=4)
-plot.ts(beer.ts.qtr[,2], main = "Quaterly Beer Production in Australia", xlab = "Year", ylab = "ML")
+plot.ts(beer.ts.qtr[,2], main = "Quaterly Beer Production in Australia", 
+        xlab = "Year", ylab = "ML")
 ```
 
 ``` {r year level plot, echo=T}
@@ -55,16 +56,19 @@ beer.ts.yr <- aggregate(beer.ts, nfrequency=1)
 plot.ts(beer.ts.yr[,2], main = "Yearly Beer Production in Australia", xlab = "Year", ylab = "ML")
 ```
 ```{r seasonal plot, echo=T}
-seasonplot(beer.ts[,2], year.labels = TRUE, year.labels.left=TRUE, col=1:40, pch=19, main = "Monthly Beer Production in Australia - seasonplot", xlab = "Month", ylab = "ML")
+seasonplot(beer.ts[,2], year.labels = TRUE, year.labels.left=TRUE, col=1:40, pch=19,
+           main = "Monthly Beer Production in Australia - seasonplot", xlab = "Month", ylab = "ML")
 ```
 
 ```{r monthly plot, echo=T}
 # monthly plot aggreated the data of all year for montly analysis
 # each month plots show the variation for entire data in each month
-monthplot(beer.ts[,2], main = "Monthly Beer Production in Australia - monthplot", xlab = "Month", ylab = "ML")
+monthplot(beer.ts[,2], main = "Monthly Beer Production in Australia - monthplot", 
+          xlab = "Month", ylab = "ML")
 ```
 ```{r boxplot, echo=T}
-boxplot(beer.ts[,2] ~ cycle(beer.ts[,2]), xlab = "Month", ylab = "ML", main = "Monthly Beer Production in Australia - Boxplot")
+boxplot(beer.ts[,2] ~ cycle(beer.ts[,2]), xlab = "Month", ylab = "ML", 
+        main = "Monthly Beer Production in Australia - Boxplot")
 ```
 ```{r moving average analysis, echo=T}
 # moving average is useful when we need to analyse trend for the underlying data
@@ -100,7 +104,9 @@ plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year
 ```
 
 ```{r adjusted monthly analysis, echo=T}
-plot.ts(beer.ts[,2]/monthdays(beer.ts[,2]), main = "Monthly Beer Production in Australia - Adjusted By Calendar Days", xlab = "Year", ylab = "ML")
+plot.ts(beer.ts[,2]/monthdays(beer.ts[,2]), 
+        main = "Monthly Beer Production in Australia - Adjusted By Calendar Days",
+        xlab = "Year", ylab = "ML")
 ```
 
 # population adjustment
@@ -123,12 +129,14 @@ plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year
 ```
 
 ```{r after log transformatin, echo=T}
-plot.ts(log(beer.ts[,2]), main = "Log Transformated Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+plot.ts(log(beer.ts[,2]), main = "Log Transformated Monthly Beer Production in Australia",
+        xlab = "Year", ylab = "ML")
 ```
 
 # decomposition
 ```{r decomposition, echo=T}
-# Decomposition is a tool that we can seperate different components in a time series data so we can see trend, 
+# Decomposition is a tool that we can seperate different components in 
+# a time series data so we can see trend, 
 # seasonility, and random noises individually
 ```
 
@@ -142,16 +150,18 @@ plot(stl(beer.ts[,2], s.window="periodic"))
 # Simple Average - simple average of all data points
 # Naive Method - the last observation value
 # Seasonal Navie - the last observation value from previous seasonal cycle
-# Drift Method - forecast value increase or decrease over time based on average change in historical data
+# Drift Method - forecast value increase or decrease over time based on average 
+#                change in historical data
 
-# Note: These models are basic model to forecasting data with no complex trends or seasonal behaviour
-# but they can be useful as the benchmarking models for reference.
+# Note: These models are basic model to forecasting data with no complex trends 
+# or seasonal behaviour but they can be useful as the benchmarking models for reference.
 
 beer.fit.a <- meanf(beer.ts[,2], h = 120)
 beer.fit.n <- naive(beer.ts[,2], h = 120)
 beer.fit.sn <- snaive(beer.ts[,2], h = 120)
 beer.fit.dri <- rwf(beer.ts[,2], h = 120, drift = TRUE)
-plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML", xlim = c(1954, 2004))
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year",
+        ylab = "ML", xlim = c(1954, 2004))
 lines(beer.fit.a$mean, col = "blue")
 lines(beer.fit.n$mean, col = "yellow4")
 lines(beer.fit.dri$mean, col = "seagreen4")
@@ -166,7 +176,8 @@ legend("topleft",lty=1,col=c("blue","yellow4","seagreen4", "red"), cex = 0.75,
 
 beer.fit.lm <- tslm(beer.ts[,2] ~ trend)
 f <- forecast(beer.fit.lm, h = 120, level = c(80,95))
-plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML", xlim = c(1954,2004))
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year",
+        ylab = "ML", xlim = c(1954,2004))
 lines(f$fitted, col = "blue")
 lines(f$mean, col = "blue")
 ```
@@ -174,7 +185,8 @@ lines(f$mean, col = "blue")
 # simple regression model for trend analysis
 # fitted versus actul plot
 
-plot(beer.fit.lm$fitted, beer.ts[,2], main = "Scatterplot between fitted & actual values", xlab = "Fitted Value", ylab = "Actual")
+plot(beer.fit.lm$fitted, beer.ts[,2], main = "Scatterplot between fitted & actual values", 
+     xlab = "Fitted Value", ylab = "Actual")
 abline(0, 1, col="blue")
 ```
 
@@ -198,14 +210,16 @@ summary(beer.fit.lm2)
 # simple regression model for (trend + seasonal) analysis
 # fitted values
 
-plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia",
+        xlab = "Year", ylab = "ML")
 lines(beer.fit.lm2$fitted.values, col = "blue")
 ```
 ```{r regression analysis 6, echo=T}
 # simple regression model for (trend + seasonal) analysis
 # scatter plot
 
-plot(beer.fit.lm2$fitted, beer.ts[,2], main = "Scatterplot between fitted & actual values", xlab = "Fitted Value", ylab = "Actual")
+plot(beer.fit.lm2$fitted, beer.ts[,2], main = "Scatterplot between fitted & actual values",
+     xlab = "Fitted Value", ylab = "Actual")
 abline(0, 1, col="blue")
 ```
 
@@ -214,7 +228,8 @@ abline(0, 1, col="blue")
 # forecast
 
 f <- forecast(beer.fit.lm2, h = 120, level = c(80,95))
-plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML", xlim = c(1954,2004))
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year",
+        ylab = "ML", xlim = c(1954,2004))
 lines(f$mean, col = "blue")
 ```
 
@@ -236,7 +251,8 @@ lines(beer.fit.lm3$fit, col = "blue")
 sin.t <- sin(2*pi*t)
 cos.t <- cos(2*pi*t)
 beer.fit.lm4 <- tslm(beer.ts[,2] ~ t + t2 + sin.t + cos.t)
-plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year",
+        ylab = "ML")
 lines(beer.fit.lm4$fit, col = "blue")
 ```
 
