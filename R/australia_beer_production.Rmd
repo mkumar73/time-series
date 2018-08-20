@@ -126,5 +126,39 @@ plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year
 plot.ts(log(beer.ts[,2]), main = "Log Transformated Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
 ```
 
+# decomposition
+```{r decomposition, echo=T}
+# Decomposition is a tool that we can seperate different components in a time series data so we can see trend, 
+# seasonility, and random noises individually
+```
+
+```{r stl decomposition, echo=T}
+plot(stl(beer.ts[,2], s.window="periodic"))
+```
+# basic forecasting techniques (SNSD)
+```{r forecasting, echo=T}
+# Simple Average - simple average of all data points
+# Naive Method - the last observation value
+# Seasonal Navie - the last observation value from previous seasonal cycle
+# Drift Method - forecast value increase or decrease over time based on average change in historical data
+
+# Note: These models are basic model to forecasting data with no complex trends or seasonal behaviour
+# but they can be useful as the benchmarking models for reference.
+
+beer.fit.a <- meanf(beer.ts[,2], h = 120)
+beer.fit.n <- naive(beer.ts[,2], h = 120)
+beer.fit.sn <- snaive(beer.ts[,2], h = 120)
+beer.fit.dri <- rwf(beer.ts[,2], h = 120, drift = TRUE)
+plot.ts(beer.ts[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML", xlim = c(1954, 2004))
+lines(beer.fit.a$mean, col = "blue")
+lines(beer.fit.n$mean, col = "yellow4")
+lines(beer.fit.dri$mean, col = "seagreen4")
+lines(beer.fit.sn$mean, col = "red")
+legend("topleft",lty=1,col=c("blue","yellow4","seagreen4", "red"), cex = 0.75,
+       legend=c("Mean method","Naive method","Drift Naive method", "Seasonal naive method"))
+```
+
+
+
 
 
