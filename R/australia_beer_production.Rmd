@@ -2,7 +2,9 @@
 title: "Australian beer production forecasting"
 author: "Manish Kumar"
 date: "8/14/2018"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ## Case Study
