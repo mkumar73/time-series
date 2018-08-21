@@ -273,9 +273,20 @@ plot.ts(beer.ts2[,2], main = "Monthly Beer Production in Australia",
 # weighted average of observations where weight decay is exponential
 # y(3) = alpha.y(2) + alpha(1-alpha).y(1) + alpha(1-alpha)^2.y(0)
 
-beer.ts2 <- window(beer.ts, start = 1993)
-plot.ts(beer.ts2[,2], main = "Monthly Beer Production in Australia", xlab = "Year", ylab = "ML")
-
+beer.fit.ses1 <- ses(beer.ts2[,2], alpha = 0.2, initial = "simple", h = 12)
+beer.fit.ses2 <- ses(beer.ts2[,2], alpha = 0.6, initial = "simple", h = 12)
+beer.fit.ses3 <- ses(beer.ts2[,2], h = 12)
+plot(beer.fit.ses1, type="o", main = "Monthly Beer Production in Australia", 
+     xlab = "Year", ylab = "ML")
+lines(beer.fit.ses1$fitted, col = "blue", type="o")
+lines(beer.fit.ses2$fitted, col = "green", type="o")
+lines(beer.fit.ses3$fitted, col = "red", type="o")
+lines(beer.fit.ses1$mean, col = "blue", type="o")
+lines(beer.fit.ses2$mean, col = "green", type="o")
+lines(beer.fit.ses3$mean, col = "red", type="o")
+legend("topleft",lty=1, col=c(1,"blue","green","red"), 
+       c("data", expression(alpha == 0.2), expression(alpha == 0.6),
+         expression(alpha == 0.87)), pch = 1)
 ```
 
 
