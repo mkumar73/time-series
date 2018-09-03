@@ -15,8 +15,10 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(name)s:%(message)
 logger = logging.getLogger(__name__)
 
 
-data = pd.read_csv('data/AirPassengers.csv', names=['Month', 'Passengers'], usecols=[1], header=0)
+dataframe = pd.read_csv('data/AirPassengers.csv', usecols=[1], header=0, engine='python')
+data = dataframe.values
+data = data.astype('float32')
 
-print(data.head())
+print(data[:5])
 plt.plot(data)
 plt.show()
