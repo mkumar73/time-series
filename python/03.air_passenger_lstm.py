@@ -16,14 +16,18 @@ logger = logging.getLogger(__name__)
 
 
 # scale the data to (0, 1) for LSTM
-def scalar_transformation(data, inverse=False):
-    scalar = MinMaxScaler(feature_range=(0, 1))
-    transformed_data = scalar.fit_transform(data)
-    if inverse:
-        data = scalar.inverse_transform(data)
-        return data
-    else:
-        return transformed_data
+# def scalar_transform(data):
+#     scalar = MinMaxScaler(feature_range=(0, 1))
+#     transformed_data = scalar.fit_transform(data)
+#     return transformed_data
+#
+#
+# # inverse transform
+# def inverse_scalar_transform(data, predicted):
+#     scalar = MinMaxScaler(feature_range=(0, 1))
+#     _ = scalar.fit_transform(data)
+#     inverse_data = scalar.inverse_transform(predicted)
+#     return inverse_data
 
 
 def train_test_split(data, fraction=0.7):
@@ -47,13 +51,14 @@ def prepare_data(data, time_step=1):
 df = pd.read_csv('data/AirPassengers.csv', usecols=[1], header=0, engine='python')
 data = df.values
 data = data.astype('float32')
-
-# scalar transformation
-data = scalar_transformation(data)
 # print(data[:5])
 
+# scalar transformation
+scalar = MinMaxScaler(feature_range=(0, 1))
+scaled_data = scalar.fit_transform(data)
+
 # split the data into train and test samples
-train, test = train_test_split(data, fraction=0.7)
+train, test = train_test_split(scaled_data, fraction=0.7)
 # print(len(train))
 # print(len(test))
 
@@ -83,9 +88,24 @@ train_pred = model.predict(trainX)
 test_pred = model.predict(testX)
 
 # the results are in the form of scaled value, so inverse the transformation
-train_pred_actual = scalar_transformation(train_pred, inverse=True)
-test_pred_actual = scalar_transformation(test_pred, inverse=True)
+train_pred_inverse = scalar.inverse_transform(train_pred)
+test_pred_inverse = scalar.inverse_transform(test_pred)
+trainY_inverse = scalar.inverse_transform(trainY)
+testY_inverse = scalar.inverse_transform(testY)
 
-logging.info('Actual data: {}'.format(data[:5]))
-logging.info('Training data prediction: {}'.format(train_pred_actual[:5]))
-logging.info('Test data prediction: {}'.format(test_pred_actual[:5]))
+logging.info('Training data : {}\n'.format(trainY_inverse[:5]))
+logging.info('Training data prediction: {}\n'.format(train_pred_inverse[:5]))
+logging.info('Test data : {}\n'.format(testY_inverse[:5]))
+logging.info('Test data prediction: {}\n'.format(test_pred_inverse[:5]))
+
+
+# RMSE calculation
+train_rmse = np.sqrt(mean_squared_error(trainY_inverse, train_pred_inverse))
+test_rmse = np.sqrt(mean_squared_error(testY_inverse, test_pred_inverse))
+
+logger.info('Training RMSE: {}'.format(train_rmse))
+logger.info('Test RMSE: {}'.format(test_rmse))
+
+
+# plotting the results and comparision
+
