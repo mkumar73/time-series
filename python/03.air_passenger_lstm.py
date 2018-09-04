@@ -93,10 +93,10 @@ test_pred_inverse = scalar.inverse_transform(test_pred)
 trainY_inverse = scalar.inverse_transform(trainY)
 testY_inverse = scalar.inverse_transform(testY)
 
-logging.info('Training data : {}\n'.format(trainY_inverse[:5]))
-logging.info('Training data prediction: {}\n'.format(train_pred_inverse[:5]))
-logging.info('Test data : {}\n'.format(testY_inverse[:5]))
-logging.info('Test data prediction: {}\n'.format(test_pred_inverse[:5]))
+# logging.info('Training data : {}\n'.format(trainY_inverse[:5]))
+# logging.info('Training data prediction: {}\n'.format(train_pred_inverse[:5]))
+# logging.info('Test data : {}\n'.format(testY_inverse[:5]))
+# logging.info('Test data prediction: {}\n'.format(test_pred_inverse[:5]))
 
 
 # RMSE calculation
@@ -108,4 +108,19 @@ logger.info('Test RMSE: {}'.format(test_rmse))
 
 
 # plotting the results and comparision
+# shift train predictions for plotting
+train_plot = np.empty_like(data)
+train_plot[:, :] = np.nan
+train_plot[time_step:len(trainY_inverse)+time_step, :] = trainY_inverse
 
+# shift test predictions for plotting
+test_plot = np.empty_like(data)
+test_plot[:, :] = np.nan
+test_plot[len(trainY_inverse)+(time_step*2)+1:len(data)-1, :] = testY_inverse
+
+# plot baseline and predictions
+plt.plot(data, 'r', label='data')
+plt.plot(train_plot, 'g--', label='training')
+plt.plot(test_plot, 'b:', label='test')
+plt.legend(loc=0)
+plt.show()
