@@ -11,7 +11,7 @@ from sklearn.metrics import mean_squared_error
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(name)s:%(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:%(asctime)s:%(name)s:%(message)s')
 logger = logging.getLogger(__name__)
 
 
