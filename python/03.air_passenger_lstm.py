@@ -41,9 +41,9 @@ def prepare_data(data, time_step=1):
     dataX = []
     dataY = []
     for i in range(len(data)-time_step-1):
-        temp = data[i, :]
+        temp = data[i, 0]
         dataX.append(temp)
-        dataY.append(data[i+time_step, :])
+        dataY.append(data[i+time_step, 0])
     return np.array(dataX), np.array(dataY)
 
 

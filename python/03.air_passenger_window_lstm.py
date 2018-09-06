@@ -24,13 +24,13 @@ def train_test_split(data, fraction=0.7):
     return train, test
 
 
-def prepare_data(data, time_step=3):
+def prepare_data(data, look_back=3):
     dataX = []
     dataY = []
-    for i in range(len(data)-time_step-1):
-        temp = data[i:(i+time_step), 0]
+    for i in range(len(data)-look_back-1):
+        temp = data[i:(i+look_back), 0]
         dataX.append(temp)
-        dataY.append(data[i+time_step, 0])
+        dataY.append(data[i+look_back, 0])
     return np.array(dataX), np.array(dataY)
 
 
@@ -50,8 +50,8 @@ train, test = train_test_split(scaled_data, fraction=0.7)
 # print(len(test))
 
 # prepare the uni-variate data in the form of X, y
-trainX, trainY = prepare_data(train, time_step=3)
-testX, testY = prepare_data(test, time_step=3)
+trainX, trainY = prepare_data(train, look_back=3)
+testX, testY = prepare_data(test, look_back=3)
 # print(trainX[:5, :])
 
 
