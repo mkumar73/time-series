@@ -26,10 +26,10 @@ def prepare_data(data, time_step=1):
     dataX = []
     dataY = []
     for i in range(len(data)-time_step-1):
-        temp = data[i, 0]
+        temp = data[i:(i+time_step), 0]
         dataX.append(temp)
         dataY.append(data[i+time_step, 0])
-    return np.array(dataX), np.array(dataY)
+    return np.array(dataX), np.array(dataY).reshape(-1, 1)
 
 
 # get the data
@@ -108,5 +108,6 @@ plt.plot(data, 'r', label='data')
 plt.plot(train_plot, 'g--', label='training')
 plt.plot(test_plot, 'b:', label='test')
 plt.legend(loc=0)
+plt.title('Basic LSTM for Passenger forecast')
 plt.savefig('plots/ap_basic_lstm_result.jpg')
 plt.show()
