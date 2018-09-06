@@ -15,21 +15,6 @@ logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:%(asctime)s:%(nam
 logger = logging.getLogger(__name__)
 
 
-# scale the data to (0, 1) for LSTM
-# def scalar_transform(data):
-#     scalar = MinMaxScaler(feature_range=(0, 1))
-#     transformed_data = scalar.fit_transform(data)
-#     return transformed_data
-#
-#
-# # inverse transform
-# def inverse_scalar_transform(data, predicted):
-#     scalar = MinMaxScaler(feature_range=(0, 1))
-#     _ = scalar.fit_transform(data)
-#     inverse_data = scalar.inverse_transform(predicted)
-#     return inverse_data
-
-
 def train_test_split(data, fraction=0.7):
     training = int(len(data)*fraction)
     train = data[0:training, :]

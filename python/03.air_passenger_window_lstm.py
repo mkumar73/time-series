@@ -40,12 +40,9 @@ data = df.values
 data = data.astype('float32')
 # print(data[:5])
 
-# scalar transformation
-scalar = MinMaxScaler(feature_range=(0, 1))
-scaled_data = scalar.fit_transform(data)
 
 # split the data into train and test samples
-train, test = train_test_split(scaled_data, fraction=0.7)
+train, test = train_test_split(data, fraction=0.7)
 # print(len(train))
 # print(len(test))
 
@@ -53,6 +50,11 @@ train, test = train_test_split(scaled_data, fraction=0.7)
 trainX, trainY = prepare_data(train, look_back=3)
 testX, testY = prepare_data(test, look_back=3)
 # print(trainX[:5, :])
+
+# scalar transformation
+# as the prepared data
+scalar = MinMaxScaler(feature_range=(0, 1))
+scaled_data = scalar.fit_transform(data)
 
 
 # create LSTM model
@@ -86,30 +88,31 @@ testY_inverse = scalar.inverse_transform(testY)
 # logging.info('Test data : {}\n'.format(testY_inverse[:5]))
 # logging.info('Test data prediction: {}\n'.format(test_pred_inverse[:5]))
 
-
-# RMSE calculation
-train_rmse = np.sqrt(mean_squared_error(trainY_inverse, train_pred_inverse))
-test_rmse = np.sqrt(mean_squared_error(testY_inverse, test_pred_inverse))
-
-logger.info('Training RMSE: {}'.format(train_rmse))
-logger.info('Test RMSE: {}'.format(test_rmse))
+print(train_pred.shape)
+print(train_pred[:5])
+# # RMSE calculation
+# train_rmse = np.sqrt(mean_squared_error(trainY_inverse, train_pred_inverse))
+# test_rmse = np.sqrt(mean_squared_error(testY_inverse, test_pred_inverse))
 #
+# logger.info('Training RMSE: {}'.format(train_rmse))
+# logger.info('Test RMSE: {}'.format(test_rmse))
+# #
+# #
+# # plotting the results and comparision
+# # shift train predictions for plotting
+# train_plot = np.empty_like(data)
+# train_plot[:, :] = np.nan
+# train_plot[time_step:len(trainY_inverse)+time_step, :] = trainY_inverse
 #
-# plotting the results and comparision
-# shift train predictions for plotting
-train_plot = np.empty_like(data)
-train_plot[:, :] = np.nan
-train_plot[time_step:len(trainY_inverse)+time_step, :] = trainY_inverse
-
-# shift test predictions for plotting
-test_plot = np.empty_like(data)
-test_plot[:, :] = np.nan
-test_plot[len(trainY_inverse)+(time_step*2)+1:len(data)-1, :] = testY_inverse
-#
-# plot baseline and predictions
-plt.plot(data, 'r', label='data')
-plt.plot(train_plot, 'g--', label='training')
-plt.plot(test_plot, 'b:', label='test')
-plt.legend(loc=0)
-plt.savefig('plots/ap_lstm_window_result.jpg')
-plt.show()
+# # shift test predictions for plotting
+# test_plot = np.empty_like(data)
+# test_plot[:, :] = np.nan
+# test_plot[len(trainY_inverse)+(time_step*2)+1:len(data)-1, :] = testY_inverse
+# #
+# # plot baseline and predictions
+# plt.plot(data, 'r', label='data')
+# plt.plot(train_plot, 'g--', label='training')
+# plt.plot(test_plot, 'b:', label='test')
+# plt.legend(loc=0)
+# plt.savefig('plots/ap_lstm_window_result.jpg')
+# plt.show()
