@@ -51,10 +51,19 @@ trainX, trainY = prepare_data(train, look_back=3)
 testX, testY = prepare_data(test, look_back=3)
 # print(trainX[:5, :])
 
-# scalar transformation
-# as the prepared data
+# scalar transformation as the prepared data
+# fit and transform predictor and outcome variable separately.
+
 scalar = MinMaxScaler(feature_range=(0, 1))
-scaled_data = scalar.fit_transform(data)
+
+scalar_fitX = scalar.fit(trainX)
+trainX = scalar_fitX.transform(trainX)
+testX = scalar_fitX.transform(testX)
+
+scalar_fitY = scalar.fit(trainY)
+trainY = scalar_fitY.transform(trainY)
+testY = scalar_fitY.transform(testY)
+
 
 
 # create LSTM model
@@ -76,6 +85,8 @@ model.fit(trainX, trainY, batch_size=1, epochs=100, verbose=2)
 # prediction
 train_pred = model.predict(trainX)
 test_pred = model.predict(testX)
+# print(train_pred.shape)
+# print(train_pred[:5])
 
 # the results are in the form of scaled value, so inverse the transformation
 train_pred_inverse = scalar.inverse_transform(train_pred)
@@ -88,8 +99,7 @@ testY_inverse = scalar.inverse_transform(testY)
 # logging.info('Test data : {}\n'.format(testY_inverse[:5]))
 # logging.info('Test data prediction: {}\n'.format(test_pred_inverse[:5]))
 
-print(train_pred.shape)
-print(train_pred[:5])
+
 # # RMSE calculation
 # train_rmse = np.sqrt(mean_squared_error(trainY_inverse, train_pred_inverse))
 # test_rmse = np.sqrt(mean_squared_error(testY_inverse, test_pred_inverse))
