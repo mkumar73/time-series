@@ -38,13 +38,13 @@ def prepare_data(data, look_back=3):
 df = pd.read_csv('data/AirPassengers.csv', usecols=[1], header=0, engine='python')
 data = df.values
 data = data.astype('float32')
-logger.info('Data loaded..!!')
+logger.info('Data loaded..')
 # print(data[:5])
 
 
 # split the data into train and test samples
 train, test = train_test_split(data, fraction=0.7)
-logger.info('Train test split done')
+logger.info('Train test split done..')
 
 # print(len(train))
 # print(len(test))
