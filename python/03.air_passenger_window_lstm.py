@@ -141,6 +141,7 @@ plt.plot(data, 'r', label='data')
 plt.plot(train_plot, 'g--', label='training')
 plt.plot(test_plot, 'b:', label='test')
 plt.legend(loc=0)
+plt.title('LSTM using Window(3) for Passenger forecast')
 plt.savefig('plots/ap_lstm_window_result.jpg')
 plt.show()
 
