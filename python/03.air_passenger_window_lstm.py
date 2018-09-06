@@ -31,7 +31,7 @@ def prepare_data(data, look_back=3):
         temp = data[i:(i+look_back), 0]
         dataX.append(temp)
         dataY.append(data[i+look_back, 0])
-    return np.array(dataX), np.array(dataY)
+    return np.array(dataX), np.array(dataY).reshape(-1, 1)
 
 
 # get the data
@@ -49,7 +49,9 @@ train, test = train_test_split(data, fraction=0.7)
 # prepare the uni-variate data in the form of X, y
 trainX, trainY = prepare_data(train, look_back=3)
 testX, testY = prepare_data(test, look_back=3)
-# print(trainX[:5, :])
+
+# print(trainX.shape)
+# print(trainY.shape)
 
 # scalar transformation as the prepared data
 # fit and transform predictor and outcome variable separately.
@@ -63,8 +65,6 @@ testX = scalar_fitX.transform(testX)
 scalar_fitY = scalar.fit(trainY)
 trainY = scalar_fitY.transform(trainY)
 testY = scalar_fitY.transform(testY)
-
-
 
 # create LSTM model
 time_step = 3
@@ -85,14 +85,14 @@ model.fit(trainX, trainY, batch_size=1, epochs=100, verbose=2)
 # prediction
 train_pred = model.predict(trainX)
 test_pred = model.predict(testX)
-# print(train_pred.shape)
-# print(train_pred[:5])
+print(train_pred.shape)
+print(train_pred[:5])
 
 # the results are in the form of scaled value, so inverse the transformation
-train_pred_inverse = scalar.inverse_transform(train_pred)
-test_pred_inverse = scalar.inverse_transform(test_pred)
-trainY_inverse = scalar.inverse_transform(trainY)
-testY_inverse = scalar.inverse_transform(testY)
+train_pred_inverse = scalar_fitY.inverse_transform(train_pred)
+test_pred_inverse = scalar_fitY.inverse_transform(test_pred)
+trainY_inverse = scalar_fitY.inverse_transform(trainY)
+testY_inverse = scalar_fitY.inverse_transform(testY)
 
 # logging.info('Training data : {}\n'.format(trainY_inverse[:5]))
 # logging.info('Training data prediction: {}\n'.format(train_pred_inverse[:5]))
