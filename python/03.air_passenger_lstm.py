@@ -58,9 +58,10 @@ testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 
 # create LSTM model
 time_step = 1
+features = 1
 
 model = Sequential()
-model.add(LSTM(5, activation='tanh', input_shape=(1, time_step)))
+model.add(LSTM(5, activation='tanh', input_shape=(time_step, features)))
 model.add(Dense(1))
 model.summary()
 
