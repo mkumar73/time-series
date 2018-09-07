@@ -79,8 +79,8 @@ features = 3
 time_step = 1
 
 # reshape the input in the form of [samples, time step, features]
-trainX = np.reshape(trainX, (trainX.shape[0], time_step, trainX.shape[1]))
-testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
+trainX = np.reshape(trainX, (trainX.shape[0], time_step, features))
+testX = np.reshape(testX, (testX.shape[0], time_step, features))
 logger.info('Data reshaped for input to LSTM..')
 
 
