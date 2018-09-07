@@ -67,27 +67,31 @@ logger.info('Data prepared as per window sequence format..')
 
 scalar = MinMaxScaler(feature_range=(0, 1))
 
-scalar = scalar.fit(trainX)
-trainX = scalar.transform(trainX)
-testX = scalar.transform(testX)
+scalar_X = scalar.fit(trainX)
+trainX = scalar_X.transform(trainX)
+testX = scalar_X.transform(testX)
 
-trainY = scalar.transform(trainY)
-testY = scalar.transform(testY)
+scalar_Y = scalar.fit(trainY)
+trainY = scalar_Y.transform(trainY)
+testY = scalar_Y.transform(testY)
 logger.info('Scale transformation completed..')
 
 
 # create LSTM model
+# trainX.shape[1] i.e number of columns in the data in simple words
+features = 1
+# time step to consider for LSTM model
 time_step = 3
 
 # reshape the input in the form of [samples, time step, features]
-trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
-testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
+trainX = np.reshape(trainX, (trainX.shape[0], time_step, features))
+testX = np.reshape(testX, (testX.shape[0], time_step, features))
 logger.info('Data reshaped for input to LSTM..')
 
 
 logger.info('Keras model building started..')
 model = Sequential()
-model.add(LSTM(5, activation='tanh', input_shape=(1, time_step)))
+model.add(LSTM(5, activation='tanh', input_shape=(time_step, features)))
 model.add(Dense(1))
 model.summary()
 
@@ -109,10 +113,10 @@ logger.info('LSTM prediction completed..')
 
 # the results are in the form of scaled value, so inverse the transformation
 logger.info('Inverse transformation of prediction result..')
-train_pred_inverse = scalar_fitY.inverse_transform(train_pred)
-test_pred_inverse = scalar_fitY.inverse_transform(test_pred)
-trainY_inverse = scalar_fitY.inverse_transform(trainY)
-testY_inverse = scalar_fitY.inverse_transform(testY)
+train_pred_inverse = scalar_Y.inverse_transform(train_pred)
+test_pred_inverse = scalar_Y.inverse_transform(test_pred)
+trainY_inverse = scalar_Y.inverse_transform(trainY)
+testY_inverse = scalar_Y.inverse_transform(testY)
 
 # logging.info('Training data : {}\n'.format(trainY_inverse[:5]))
 # logging.info('Training data prediction: {}\n'.format(train_pred_inverse[:5]))
@@ -131,14 +135,16 @@ logger.info('Test RMSE: {}'.format(test_rmse))
 # shift train predictions for plotting
 logger.info('Plotting the result for comparision..')
 
+look_back = 3
+
 train_plot = np.empty_like(data)
 train_plot[:, :] = np.nan
-train_plot[time_step:len(trainY_inverse)+time_step, :] = trainY_inverse
+train_plot[look_back:len(trainY_inverse)+look_back, :] = trainY_inverse
 
 # shift test predictions for plotting
 test_plot = np.empty_like(data)
 test_plot[:, :] = np.nan
-test_plot[len(trainY_inverse)+(time_step*2)+1:len(data)-1, :] = testY_inverse
+test_plot[len(trainY_inverse)+(look_back*2)+1:len(data)-1, :] = testY_inverse
 #
 # plot baseline and predictions
 plt.plot(data, 'r', label='data')
@@ -146,7 +152,7 @@ plt.plot(train_plot, 'g--', label='training')
 plt.plot(test_plot, 'b:', label='test')
 plt.legend(loc=0)
 plt.title('LSTM using time window for Passenger forecast')
-plt.savefig('plots/ap_lstm_window_result.jpg')
+plt.savefig('plots/ap_lstm_timestep_result.jpg')
 plt.show()
 
 logger.info('Process completed..')
