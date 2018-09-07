@@ -73,17 +73,20 @@ logger.info('Scale transformation completed..')
 
 
 # create LSTM model
-time_step = 3
+# trainX.shape[1] i.e number of columns in the data in simple words
+features = 3
+# time step to consider for LSTM model
+time_step = 1
 
 # reshape the input in the form of [samples, time step, features]
-trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
+trainX = np.reshape(trainX, (trainX.shape[0], time_step, trainX.shape[1]))
 testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 logger.info('Data reshaped for input to LSTM..')
 
 
 logger.info('Keras model building started..')
 model = Sequential()
-model.add(LSTM(5, activation='tanh', input_shape=(1, time_step)))
+model.add(LSTM(5, activation='tanh', input_shape=(time_step, features)))
 model.add(Dense(1))
 model.summary()
 
