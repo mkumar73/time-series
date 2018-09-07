@@ -51,14 +51,14 @@ train, test = train_test_split(scaled_data, fraction=0.7)
 trainX, trainY = prepare_data(train, time_step=1)
 testX, testY = prepare_data(test, time_step=1)
 
-# reshape the input in the form of [samples, time step, features]
-trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
-testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
-
 
 # create LSTM model
 time_step = 1
 features = 1
+
+# reshape the input in the form of [batch_size, time step, features]
+trainX = np.reshape(trainX, (trainX.shape[0], time_step, features))
+testX = np.reshape(testX, (testX.shape[0], time_step, features))
 
 model = Sequential()
 model.add(LSTM(5, activation='tanh', input_shape=(time_step, features)))
