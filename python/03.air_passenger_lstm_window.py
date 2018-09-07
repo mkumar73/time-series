@@ -130,14 +130,16 @@ logger.info('Test RMSE: {}'.format(test_rmse))
 # shift train predictions for plotting
 logger.info('Plotting the result for comparision..')
 
+look_back = 3
+
 train_plot = np.empty_like(data)
 train_plot[:, :] = np.nan
-train_plot[time_step:len(trainY_inverse)+time_step, :] = trainY_inverse
+train_plot[look_back:len(trainY_inverse)+look_back, :] = trainY_inverse
 
 # shift test predictions for plotting
 test_plot = np.empty_like(data)
 test_plot[:, :] = np.nan
-test_plot[len(trainY_inverse)+(time_step*2)+1:len(data)-1, :] = testY_inverse
+test_plot[len(trainY_inverse)+(look_back*2)+1:len(data)-1, :] = testY_inverse
 #
 # plot baseline and predictions
 plt.plot(data, 'r', label='data')
