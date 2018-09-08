@@ -88,7 +88,10 @@ logger.info('Train, test and validation generator completed..')
 #     print(x.shape)
 #     print(y[:5, :])
 
-time_step = 6
-look_back = 720
-model = Sequential()
-model.add(LSTM(10, activation='tanh', input_shape=(time_step, look_back)))
+# time_step = 6
+# look_back = 720
+# model = Sequential()
+# model.add(LSTM(10, activation='tanh', input_shape=(time_step, look_back)))
+# model.add(Dense(144))
+# model.summary()
+# model.compile(optimizer='adam', loss='mean_squared_error')
