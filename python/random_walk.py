@@ -66,5 +66,3 @@ tsplot(x, lags=20, show=False)
 x_new = np.diff(x)
 
 tsplot(x_new, lags=20, show=True)
-
-
