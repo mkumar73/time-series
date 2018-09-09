@@ -50,6 +50,6 @@ def stationary_check(data):
     print('#observation used: {}'.format(fuller_results[3]))
 
     for key, value in fuller_results[4].items():
-        print('Significance Level and value: {0}, : {1}:'.format(key, value))
+        print('Significance Level and value: {0}, : {1}'.format(key, value))
 
     return
