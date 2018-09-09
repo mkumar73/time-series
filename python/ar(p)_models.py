@@ -11,7 +11,7 @@ import statsmodels.formula.api as smf
 import scipy.stats as scs
 
 # my utils library
-from ts_utils import tsplot
+from ts_utils import tsplot, stationary_check
 
 np.random.seed(1)
 n_samples = 1000
@@ -21,9 +21,15 @@ data = noise = np.random.normal(size=1000)
 
 # case : 1, alpha = 0.5
 alpha = 0.7
-data_1 = np.zeros(len(data))
 for t in range(len(data)):
     data[t] = alpha * data[t-1] + noise[t]
 
+tsplot(data, lags=20, show=False)
+stationary_check(data)
 
-tsplot(data, lags=20, show=True)
+# lets fit the model to detect the ar order
+
+ar1 = smt.AR(data).fit(maxlag=10, ic='aic')
+order = smt.AR(data).select_order(maxlag=10, ic='aic')
+print(order)
+print(ar1.params[1])
