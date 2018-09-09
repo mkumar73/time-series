@@ -36,3 +36,20 @@ def tsplot(data, lags, show=True):
             plt.show()
     return
 
+
+# adfuller method works for 1d data so, the data should
+# either be a series or a 1d numpy array
+
+# write a funtion to check the stationarity of the data.
+def stationary_check(data):
+    fuller_results = smt.stattools.adfuller(data)
+
+    print('Fuller Statistics : {}'.format(fuller_results[0]))
+    print('Fuller test P-value : {}'.format(fuller_results[1]))
+    print('#lags used : {}'.format(fuller_results[2]))
+    print('#observation used: {}'.format(fuller_results[3]))
+
+    for key, value in fuller_results[4].items():
+        print('Significance Level and value: {0}, : {1}:'.format(key, value))
+
+    return
