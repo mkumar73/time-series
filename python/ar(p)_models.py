@@ -24,12 +24,12 @@ alpha = 0.7
 for t in range(len(data)):
     data[t] = alpha * data[t-1] + noise[t]
 
-tsplot(data, lags=20, show=False)
+tsplot(data, lags=20, show=True)
 stationary_check(data)
 
 # lets fit the model to detect the ar order
 
-ar1 = smt.AR(data).fit(maxlag=10, ic='aic')
-order = smt.AR(data).select_order(maxlag=10, ic='aic')
-print(order)
-print(ar1.params[1])
+ar1 = smt.AR(data).fit(maxlag=10, ic='aic', trend='nc')
+order = smt.AR(data).select_order(maxlag=10, ic='aic', trend='nc')
+print('Estimated order of AR model: {}'.format(order))
+print('Estimated alpha of AR model: {}'.format(ar1.params[0]))
