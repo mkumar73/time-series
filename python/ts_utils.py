@@ -43,7 +43,7 @@ def tsplot(data, lags, show=True):
 # write a funtion to check the stationarity of the data.
 def stationary_check(data):
     fuller_results = smt.stattools.adfuller(data)
-
+    print('Fuller Stationarity check..')
     print('Fuller Statistics : {}'.format(fuller_results[0]))
     print('Fuller test P-value : {}'.format(fuller_results[1]))
     print('#lags used : {}'.format(fuller_results[2]))
