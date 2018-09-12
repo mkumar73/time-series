@@ -11,7 +11,7 @@ import statsmodels.formula.api as smf
 import scipy.stats as scs
 
 # my utils library
-from ts_utils import tsplot, stationary_check
+from ts_utils import stationary_check, tsplot
 
 np.random.seed(1)
 n_samples = 1000
