@@ -29,12 +29,12 @@ def tsplot(data, lags, show=True):
         ts_ax.set_title('Time plot for the data')
 
         smt.graphics.plot_acf(data, ax=acf_ax, lags=lags, alpha=0.5)
-        # acf_ax.axhline(y=-1.96/np.sqrt(int(len(data))), linestyle='--')
-        # acf_ax.axhline(y=1.96/np.sqrt(int(len(data))), linestyle='--')
+        acf_ax.axhline(y=-1.96/np.sqrt(int(len(data))), linestyle='--')
+        acf_ax.axhline(y=1.96/np.sqrt(int(len(data))), linestyle='--')
 
         smt.graphics.plot_pacf(data, ax=pacf_ax, lags=lags, alpha=0.5)
-        # acf_ax.axhline(y=-1.96/np.sqrt(int(len(data))), linestyle='--')
-        # acf_ax.axhline(y=1.96/np.sqrt(int(len(data))), linestyle='--')
+        pacf_ax.axhline(y=-1.96/np.sqrt(int(len(data))), linestyle='--')
+        pacf_ax.axhline(y=1.96/np.sqrt(int(len(data))), linestyle='--')
 
         [ax.set_ylim(-0.5, 1) for ax in [acf_ax, pacf_ax]]
 
