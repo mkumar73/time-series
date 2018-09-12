@@ -8,6 +8,7 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import scipy.stats as scs
 
+plt.rcParams['figure.figsize'] = 15, 8
 
 def tsplot(data, lags, show=True):
 
