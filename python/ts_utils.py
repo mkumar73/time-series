@@ -63,3 +63,12 @@ def stationary_check(data):
         print('Significance Level and value: {0}, : {1}'.format(key, value))
 
     return
+
+
+def prepare_data(data, time_step=1):
+    dataX = np.zeros((len(data)-time_step-1, 1))
+    dataY = np.zeros((len(data)-time_step-1, 1))
+    for i in range(len(data)-time_step-1):
+        dataX[i, 0] = data[i:(i+time_step), 0]
+        dataY[i, 0] = data[i+time_step, 0]
+    return dataX, dataY
