@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import logging
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 
@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:%(asctime)s:%(nam
 logger = logging.getLogger(__name__)
 
 
-def train_test_split(data, fraction=0.7):
+def train_test_split(data, fraction=0.8):
     training = int(len(data)*fraction)
     train = data[0:training, :]
     test = data[training:, :]
@@ -43,9 +43,9 @@ scalar = MinMaxScaler(feature_range=(0, 1))
 scaled_data = scalar.fit_transform(data)
 
 # split the data into train and test samples
-train, test = train_test_split(scaled_data, fraction=0.7)
-# print(len(train))
-# print(len(test))
+train, test = train_test_split(scaled_data, fraction=0.8)
+print(len(train))
+print(len(test))
 
 # prepare the uni-variate data in the form of X, y
 trainX, trainY = prepare_data(train, time_step=1)
@@ -85,16 +85,21 @@ testY_inverse = scalar.inverse_transform(testY)
 # logging.info('Test data prediction: {}\n'.format(test_pred_inverse[:5]))
 
 
-# RMSE calculation
-train_rmse = np.sqrt(mean_squared_error(trainY_inverse, train_pred_inverse))
-test_rmse = np.sqrt(mean_squared_error(testY_inverse, test_pred_inverse))
+# MAE and MSE calculation
+train_mse = mean_squared_error(trainY_inverse, train_pred_inverse)
+train_mae = mean_absolute_error(trainY_inverse, train_pred_inverse)
 
-logger.info('Training RMSE: {}'.format(train_rmse))
-logger.info('Test RMSE: {}'.format(test_rmse))
+test_mse = mean_squared_error(testY_inverse, test_pred_inverse)
+test_mae = mean_absolute_error(testY_inverse, test_pred_inverse)
 
+logger.info(f'Training MSE: {train_mse}')
+logger.info(f'Training MAE: {train_mae}')
+
+logger.info(f'Test MSE: {test_mse}')
+logger.info(f'Test MAE: {test_mae}')
 
 # plotting the results and comparision
-# shift train predictions for plotting
+# shift test predictions for plotting (include index for plotting)
 train_plot = np.empty_like(data)
 train_plot[:, :] = np.nan
 train_plot[time_step:len(trainY_inverse)+time_step, :] = trainY_inverse
@@ -104,11 +109,13 @@ test_plot = np.empty_like(data)
 test_plot[:, :] = np.nan
 test_plot[len(trainY_inverse)+(time_step*2)+1:len(data)-1, :] = testY_inverse
 
-# plot baseline and predictions
-plt.plot(data, 'r', label='data')
-plt.plot(train_plot, 'g--', label='training')
-plt.plot(test_plot, 'b:', label='test')
-plt.legend(loc=0)
-plt.title('Basic LSTM for Passenger forecast')
-plt.savefig('plots/ap_basic_lstm_result.jpg')
+# result plotting
+plt.plot(data, label='actual')
+plt.plot(train_plot, color='red', linestyle='-.', label='training prediction')
+plt.plot(test_plot, color='green', linestyle='-', label='test prediction')
+plt.xlabel('Years')
+plt.ylabel('#thousand air passengers')
+plt.title('Actual versus Predicted values of International Air Passengers')
+plt.legend()
+plt.tight_layout()
 plt.show()
