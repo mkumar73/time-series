@@ -10,16 +10,17 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
+from sklearn.model_selection import train_test_split
 
 logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:%(asctime)s:%(name)s:%(message)s')
 logger = logging.getLogger(__name__)
 
 
-def train_test_split(data, fraction=0.8):
-    training = int(len(data)*fraction)
-    train = data[0:training, :]
-    test = data[training:, :]
-    return train, test
+# def train_test_split(data, fraction=0.8):
+#     training = int(len(data)*fraction)
+#     train = data[0:training, :]
+#     test = data[training:, :]
+#     return train, test
 
 
 def prepare_data(data, time_step=1):
@@ -43,7 +44,7 @@ scalar = MinMaxScaler(feature_range=(0, 1))
 scaled_data = scalar.fit_transform(data)
 
 # split the data into train and test samples
-train, test = train_test_split(scaled_data, fraction=0.8)
+train, test = train_test_split(scaled_data, train_size=0.8)
 print(len(train))
 print(len(test))
 
@@ -51,6 +52,8 @@ print(len(test))
 trainX, trainY = prepare_data(train, time_step=1)
 testX, testY = prepare_data(test, time_step=1)
 
+print(len(trainX))
+print(len(testX))
 
 # create LSTM model
 time_step = 1
@@ -61,13 +64,13 @@ trainX = np.reshape(trainX, (trainX.shape[0], time_step, features))
 testX = np.reshape(testX, (testX.shape[0], time_step, features))
 
 model = Sequential()
-model.add(LSTM(5, activation='tanh', input_shape=(time_step, features)))
+model.add(LSTM(3, activation='tanh', input_shape=(time_step, features)))
 model.add(Dense(1))
 model.summary()
 
 # training and model fitting
 model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(trainX, trainY, batch_size=1, epochs=100, verbose=2)
+model.fit(trainX, trainY, batch_size=1, epochs=70, verbose=2)
 
 # prediction
 train_pred = model.predict(trainX)
@@ -76,6 +79,7 @@ test_pred = model.predict(testX)
 # the results are in the form of scaled value, so inverse the transformation
 train_pred_inverse = scalar.inverse_transform(train_pred)
 test_pred_inverse = scalar.inverse_transform(test_pred)
+
 trainY_inverse = scalar.inverse_transform(trainY)
 testY_inverse = scalar.inverse_transform(testY)
 
@@ -102,12 +106,12 @@ logger.info(f'Test MAE: {test_mae}')
 # shift test predictions for plotting (include index for plotting)
 train_plot = np.empty_like(data)
 train_plot[:, :] = np.nan
-train_plot[time_step:len(trainY_inverse)+time_step, :] = trainY_inverse
+train_plot[time_step:len(train_pred_inverse)+time_step, :] = train_pred_inverse
 
 # shift test predictions for plotting
 test_plot = np.empty_like(data)
 test_plot[:, :] = np.nan
-test_plot[len(trainY_inverse)+(time_step*2)+1:len(data)-1, :] = testY_inverse
+test_plot[len(train_pred_inverse)+(time_step*2)+1:len(data)-1, :] = test_pred_inverse
 
 # result plotting
 plt.plot(data, label='actual')
@@ -119,3 +123,15 @@ plt.title('Actual versus Predicted values of International Air Passengers')
 plt.legend()
 plt.tight_layout()
 plt.show()
+
+#  LSTM #5 Unit result
+# INFO:2018-10-31 11:44:25,441:__main__:Training MSE: 687.0271606445312
+# INFO:2018-10-31 11:44:25,442:__main__:Training MAE: 20.397884368896484
+# INFO:2018-10-31 11:44:25,442:__main__:Test MSE: 2653.2421875
+# INFO:2018-10-31 11:44:25,442:__main__:Test MAE: 44.971256256103516
+
+# LSTM #3 unit result
+# INFO:2018-10-31 12:08:14,464:__main__:Training MSE: 699.6713256835938
+# INFO:2018-10-31 12:08:14,464:__main__:Training MAE: 20.57431411743164
+# INFO:2018-10-31 12:08:14,464:__main__:Test MSE: 2764.253662109375
+# INFO:2018-10-31 12:08:14,464:__main__:Test MAE: 44.807525634765625
