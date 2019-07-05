@@ -1,2 +1,2 @@
 # time-series
-Contain practice exercise and interesting time series forecasting use cases.
+Time series experiments using machine learning, deep learning and statistical methods.
