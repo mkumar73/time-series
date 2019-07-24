@@ -230,7 +230,6 @@ tensorflow==1.7.0
 termcolor==1.1.0
 terminado==0.8.1
 testpath==0.4.2
-Theano==1.0.3+2.g3e47d39.dirty
 toolz==0.9.0
 tornado==5.1.1
 tqdm==4.28.1
