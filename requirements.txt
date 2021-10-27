@@ -46,7 +46,7 @@ cvxpy==1.0.19
 cycler==0.10.0
 Cython==0.29
 cytoolz==0.9.0.1
-dask==0.20.2
+dask==2021.10.0
 datashape==0.5.4
 debacl==1.1
 decorator==4.3.0
