@@ -51,7 +51,7 @@ datashape==0.5.4
 debacl==1.1
 decorator==4.3.0
 dill==0.2.9
-distributed==1.24.2
+distributed==2021.10.0
 docutils==0.14
 ecos==2.0.7.post1
 entrypoints==0.2.3
