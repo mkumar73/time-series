@@ -110,7 +110,7 @@ line-profiler==2.1.2
 llvmlite==0.25.0
 locket==0.2.0
 lxml==4.2.5
-Mako==1.0.7
+Mako==1.2.2
 Markdown==3.0.1
 MarkupSafe==1.1.0
 matplotlib==3.0.2
