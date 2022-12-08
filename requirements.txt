@@ -26,7 +26,7 @@ Bottleneck==1.2.1
 brewer2mpl==1.4.1
 catboost==0.15.2
 category-encoders==2.0.0
-certifi==2019.6.16
+certifi==2022.12.7
 cffi==1.11.5
 chardet==3.0.4
 Click==7.0
